@@ -78,14 +78,15 @@ WSGI_APPLICATION = 'heart_disease_web_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'heart_disease_web_app',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': config('HOST')
-        }
+        'USER': 'web_app',
+        'PASSWORD': 'verysecretpassword',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
