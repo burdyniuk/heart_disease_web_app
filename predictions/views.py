@@ -9,6 +9,10 @@ import prediction_model_function as prediction_model
 import matlab
 
 
+def home(request):
+    return render(request, 'home.html')
+
+
 @login_required(login_url='login/')
 def prediction_input_view(request):
     if request.method == 'POST':
@@ -47,7 +51,11 @@ def prediction_input_view(request):
     return render(request, 'predictions/prediction_input.html', {'form': form})
 
 
-@login_required(login_url='login/')
 def predictions_list_view(request):
     predictions = Prediction.objects.all()
+    return render(request, 'predictions/predictions_list.html', {'predictions': predictions})
+
+
+def my_predictions(request):
+    predictions = Prediction.objects.filter(created_by=request.user)
     return render(request, 'predictions/predictions_list.html', {'predictions': predictions})
