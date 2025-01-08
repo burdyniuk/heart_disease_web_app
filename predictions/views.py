@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.apps import apps
 
 from .forms import PredictionForm
 from .models import Prediction
@@ -15,6 +16,7 @@ def prediction_input_view(request):
         if form.is_valid():
             # Extract form data
             data = form.cleaned_data
+
             input_data = [
                 data['age'], int(data['sex']), int(data['chest_pain_type']), data['resting_bp_s'],
                 data['cholesterol'], int(data['fasting_blood_sugar']), int(data['resting_ecg']),
@@ -22,7 +24,7 @@ def prediction_input_view(request):
             ]
 
             # Make prediction
-            predictor = prediction_model.initialize()
+            predictor = apps.get_app_config('predictions').predictor
             result = predictor.prediction_model_function(matlab.double([input_data]))
             target = int(result)
             predictor.terminate()
@@ -43,3 +45,9 @@ def prediction_input_view(request):
         form = PredictionForm()
 
     return render(request, 'predictions/prediction_input.html', {'form': form})
+
+
+@login_required(login_url='login/')
+def predictions_list_view(request):
+    predictions = Prediction.objects.all()
+    return render(request, 'predictions/predictions_list.html', {'predictions': predictions})

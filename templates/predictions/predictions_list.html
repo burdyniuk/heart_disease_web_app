@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predictions List</title>
+</head>
+<body>
+    <h1>Predictions List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Age</th>
+                <th>Sex</th>
+                <th>Chest Pain Type</th>
+                <th>Resting BP Systolic</th>
+                <th>Cholesterol</th>
+                <th>Fasting Blood Sugar</th>
+                <th>Resting ECG</th>
+                <th>Max Heart Rate</th>
+                <th>Exercise Angina</th>
+                <th>Oldpeak</th>
+                <th>ST Slope</th>
+                <th>Prediction Result</th>
+                <th>Created At</th>
+                <th>Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prediction in predictions %}
+            <tr>
+                <td>{{ prediction.age }}</td>
+                <td>{{ prediction.get_sex_display }}</td>
+                <td>{{ prediction.get_chest_pain_type_display }}</td>
+                <td>{{ prediction.resting_bp_s }}</td>
+                <td>{{ prediction.cholesterol }}</td>
+                <td>{{ prediction.get_fasting_blood_sugar_display }}</td>
+                <td>{{ prediction.get_resting_ecg_display }}</td>
+                <td>{{ prediction.max_heart_rate }}</td>
+                <td>{{ prediction.get_exercise_angina_display }}</td>
+                <td>{{ prediction.oldpeak }}</td>
+                <td>{{ prediction.get_st_slope_display }}</td>
+                <td>{{ prediction.get_target_display }}</td>
+                <td>{{ prediction.created_at }}</td>
+                <td>{{ prediction.created_by.username }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
