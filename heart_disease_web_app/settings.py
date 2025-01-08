@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djongo',
-    "account.apps.AccountConfig"
+    "account.apps.AccountConfig",
+    "predictions.apps.PredictionsConfig"
 ]
 
 MIDDLEWARE = [
