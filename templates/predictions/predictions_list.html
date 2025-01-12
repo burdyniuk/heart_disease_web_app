@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Predictions List</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Predictions List{% endblock %}
+
+{% block content %}
     <h1>Predictions List</h1>
-    <table border="1">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Age</th>
@@ -21,7 +20,9 @@
                 <th>ST Slope</th>
                 <th>Prediction Result</th>
                 <th>Created At</th>
+                {% if not my %}
                 <th>Created By</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -40,10 +41,11 @@
                 <td>{{ prediction.get_st_slope_display }}</td>
                 <td>{{ prediction.get_target_display }}</td>
                 <td>{{ prediction.created_at }}</td>
+                {% if not my %}
                 <td>{{ prediction.created_by.username }}</td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}

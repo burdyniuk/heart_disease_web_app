@@ -58,4 +58,4 @@ def predictions_list_view(request):
 
 def my_predictions(request):
     predictions = Prediction.objects.filter(created_by=request.user)
-    return render(request, 'predictions/predictions_list.html', {'predictions': predictions})
+    return render(request, 'predictions/predictions_list.html', {'predictions': predictions, 'my': True})
