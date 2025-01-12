@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Prediction Input</title>
-</head>
-<body>
-    <h2>Enter Prediction Values</h2>
+{% extends 'base.html' %}
+
+{% block title %}Verifică risc{% endblock %}
+
+{% block content %}
+    <h2>Introduceți valorile pentru predicție</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Submit</button>
+        <button class="btn btn-success" type="submit">Verifică</button>
     </form>
-</body>
-</html>
+{% endblock %}
