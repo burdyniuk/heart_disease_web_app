@@ -3,10 +3,14 @@
 {% block title %}Verifică risc{% endblock %}
 
 {% block content %}
-    <h2>Introduceți valorile pentru predicție</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-success" type="submit">Verifică</button>
-    </form>
+    <div id="input-div">
+        <h2>Introduceți valorile pentru predicție</h2>
+        <form method="post" hx-post="{% url 'prediction_input' %}" hx-trigger="submit from:form" hx-target="#input-div">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-success" type="submit">Verifică</button>
+        </form>
+    </div>
+
+
 {% endblock %}
