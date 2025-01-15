@@ -3,7 +3,11 @@
 {% block title %}Predictions List{% endblock %}
 
 {% block content %}
-    <h1>Predictions List</h1>
+    {% if not my %}
+    <h1>Toate predicțiile</h1>
+    {% else %}
+    <h1>Predicțiile mele</h1>
+    {% endif %}
     <table class="table table-striped">
         <thead>
             <tr>
