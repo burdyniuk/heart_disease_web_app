@@ -6,6 +6,7 @@
     <div id="input-div" class="container mt-5">
         <h2>Introduceți valorile pentru predicție</h2>
         <form method="post" hx-post="{% url 'prediction_input' %}" hx-trigger="submit from:form" hx-target="#input-div">
+            {% csrf_token %}
             <div class="mb-3">
                 <label for="age" class="form-label">Vârsta:</label>
                 <input type="number" id="age" name="age" class="form-control" min="1" max="120" required>
@@ -13,7 +14,7 @@
 
             <div class="mb-3">
                 <label for="age" class="form-label">Sex:</label>
-                <select id="age" name="age">
+                <select id="age" name="age" class="form-select">
                     <option value="0">Femeie</option>
                     <option value="1">Bărbat</option>
                 </select>
@@ -21,7 +22,7 @@
 
             <div class="mb-3">
                 <label for="chest_pain_type" class="form-label">Tipul de durere toracică:</label>
-                <select name="chest_pain_type" id="chest_pain_type">
+                <select name="chest_pain_type" id="chest_pain_type" class="form-select">
                     <option value="4">Asimptomatic</option>
                     <option value="1">Angină tipică</option>
                     <option value="2">Angină atipică</option>
@@ -41,7 +42,7 @@
 
             <div class="mb-3">
                 <label for="fasting_blood_sugar" class="form-label">Zahărul din sânge în post:</label>
-                <select name="fasting_blood_sugar" id="fasting_blood_sugar">
+                <select name="fasting_blood_sugar" id="fasting_blood_sugar" class="form-select">
                     <option value="0">Sub 120 mg/dl</option>
                     <option value="1">Peste 120 mg/dl</option>
                 </select>
@@ -49,7 +50,7 @@
 
             <div class="mb-3">
                 <label for="resting_ecg" class="form-label">Rezultatele electrocardiogramei în repaus:</label>
-                <select name="resting_ecg" id="resting_ecg">
+                <select name="resting_ecg" id="resting_ecg" class="form-select">
                     <option value="0">Normal</option>
                     <option value="1">Anomalie undă ST-T</option>
                     <option value="2">Prezintă hipertrofie ventriculară stângă probabilă sau certă după criteriile Estes</option>
@@ -63,7 +64,7 @@
 
             <div class="mb-3">
                 <label for="exercise_angina" class="form-label">Angina pectorală indusă de efort :</label>
-                <select name="exercise_angina" id="exercise_angina">
+                <select name="exercise_angina" id="exercise_angina" class="form-select">
                     <option value="0">Nu</option>
                     <option value="1">Da</option>
                 </select>
@@ -76,16 +77,12 @@
 
             <div class="mb-3">
                 <label for="st_slope" class="form-label">Panta segmentului ST de vârf al efortului:</label>
-                <select name="st_slope" id="st_slope">
+                <select name="st_slope" id="st_slope" class="form-select">
                     <option value="0">Ascendent</option>
                     <option value="1">Plat</option>
                     <option value="2">Descendent</option>
                 </select>
             </div>
-
-
-            {% csrf_token %}
-            {{ form.as_p }}
             <button class="btn btn-success" type="submit">Verifică</button>
         </form>
     </div>
