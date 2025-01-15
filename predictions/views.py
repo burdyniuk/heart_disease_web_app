@@ -21,26 +21,31 @@ def prediction_input_view(request):
         if form.is_valid():
             # Extract form data
             data = form.cleaned_data
+            data['sex'] = int(data['sex'])
+            data['chest_pain_type'] = int(data['chest_pain_type'])
+            data['fasting_blood_sugar'] = int(data['fasting_blood_sugar'])
+            data['resting_ecg'] = int(data['resting_ecg'])
+            data['exercise_angina'] = int(data['exercise_angina'])
+            data['st_slope'] = int(data['st_slope'])
 
             input_data = [
-                data['age'], int(data['sex']), int(data['chest_pain_type']), data['resting_bp_s'],
-                data['cholesterol'], int(data['fasting_blood_sugar']), int(data['resting_ecg']),
-                data['max_heart_rate'], int(data['exercise_angina']), data['oldpeak'], int(data['st_slope'])
+                data['age'], data['sex'], data['chest_pain_type'], data['resting_bp_s'],
+                data['cholesterol'], data['fasting_blood_sugar'], int(data['resting_ecg']),
+                data['max_heart_rate'], data['exercise_angina'], data['oldpeak'], data['st_slope']
             ]
 
             # Make prediction
             predictor = apps.get_app_config('predictions').predictor
             result = predictor.prediction_model_function(matlab.double([input_data]))
             target = int(result)
-            predictor.terminate()
 
             # Save to database
             prediction = Prediction(
-                age=data['age'], sex=int(data['sex']), chest_pain_type=int(data['chest_pain_type']),
+                age=data['age'], sex=data['sex'], chest_pain_type=data['chest_pain_type'],
                 resting_bp_s=data['resting_bp_s'], cholesterol=data['cholesterol'],
-                fasting_blood_sugar=int(data['fasting_blood_sugar']), resting_ecg=int(data['resting_ecg']),
-                max_heart_rate=data['max_heart_rate'], exercise_angina=int(data['exercise_angina']),
-                oldpeak=data['oldpeak'], st_slope=int(data['st_slope']), target=target,
+                fasting_blood_sugar=data['fasting_blood_sugar'], resting_ecg=data['resting_ecg'],
+                max_heart_rate=data['max_heart_rate'], exercise_angina=data['exercise_angina'],
+                oldpeak=data['oldpeak'], st_slope=data['st_slope'], target=target,
                 created_by=request.user
             )
             prediction.save()

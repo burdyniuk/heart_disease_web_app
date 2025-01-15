@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Verifică risc{% endblock %}
 
 {% block content %}
     <div id="input-div" class="container mt-5">
         <h2>Introduceți valorile pentru predicție</h2>
-        <form method="post"
-{#              hx-post="{% url 'prediction_input' %}" hx-trigger="submit from:form" hx-target="#input-div"#}
+        <form
+                method="post"
+                hx-post="{% url 'prediction_input' %}"
+                hx-trigger="submit from:form"
+                hx-target="#input-div"
+                hx-indicator="#spinner"
         >
             {% csrf_token %}
             <div class="mb-3">
@@ -86,10 +91,15 @@
                 </select>
             </div>
 
-{#            {{ form.as_div }}#}
-            <button class="btn btn-success" type="submit">Verifică</button>
+            <button id="submit-button" class="btn btn-success" type="submit" _="on click toggle @disabled until htmx:afterOnLoad">Verifică</button>
+            <img width="30px" id="spinner" class="htmx-indicator" src="{% static 'bouncing-circles.svg' %}"/>
         </form>
     </div>
 
+    <script>
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+        document.getElementById('submit-button').disabled = true;
+    });
+    </script>
 
 {% endblock %}
