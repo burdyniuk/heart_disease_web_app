@@ -17,6 +17,7 @@ def home(request):
 def prediction_input_view(request):
     if request.method == 'POST':
         form = PredictionForm(request.POST)
+
         if form.is_valid():
             # Extract form data
             data = form.cleaned_data

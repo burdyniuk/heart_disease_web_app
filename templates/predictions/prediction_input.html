@@ -5,7 +5,9 @@
 {% block content %}
     <div id="input-div" class="container mt-5">
         <h2>Introduceți valorile pentru predicție</h2>
-        <form method="post" hx-post="{% url 'prediction_input' %}" hx-trigger="submit from:form" hx-target="#input-div">
+        <form method="post"
+{#              hx-post="{% url 'prediction_input' %}" hx-trigger="submit from:form" hx-target="#input-div"#}
+        >
             {% csrf_token %}
             <div class="mb-3">
                 <label for="age" class="form-label">Vârsta:</label>
@@ -13,8 +15,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="age" class="form-label">Sex:</label>
-                <select id="age" name="age" class="form-select">
+                <label for="sex" class="form-label">Sex:</label>
+                <select id="sex" name="sex" class="form-select">
                     <option value="0">Femeie</option>
                     <option value="1">Bărbat</option>
                 </select>
@@ -78,11 +80,13 @@
             <div class="mb-3">
                 <label for="st_slope" class="form-label">Panta segmentului ST de vârf al efortului:</label>
                 <select name="st_slope" id="st_slope" class="form-select">
-                    <option value="0">Ascendent</option>
-                    <option value="1">Plat</option>
-                    <option value="2">Descendent</option>
+                    <option value="1">Ascendent</option>
+                    <option value="2">Plat</option>
+                    <option value="3">Descendent</option>
                 </select>
             </div>
+
+{#            {{ form.as_div }}#}
             <button class="btn btn-success" type="submit">Verifică</button>
         </form>
     </div>
