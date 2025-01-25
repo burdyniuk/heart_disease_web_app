@@ -36,7 +36,7 @@ def prediction_input_view(request):
 
             # Make prediction
             predictor = apps.get_app_config('predictions').predictor
-            result = predictor.prediction_model_function(matlab.double([input_data]))
+            result = predictor.quadratic_svm_prediction_model(matlab.double([input_data]))
             target = int(result)
 
             # Save to database
