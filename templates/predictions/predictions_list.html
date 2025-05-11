@@ -6,9 +6,12 @@
 
 {% block content %}
     {% if not my %}
-    <h1>Toate predicțiile</h1>
+        <h1>Toate predicțiile</h1>
+        {% if request.user.is_staff %}
+            <a class="btn btn-primary" id="export-btn" href="{% url 'export_train_data_csv' %}">Exportă datele de antrenare</a>
+        {% endif %}
     {% else %}
-    <h1>Predicțiile mele</h1>
+        <h1>Predicțiile mele</h1>
     {% endif %}
     <table class="table table-striped">
         <thead>

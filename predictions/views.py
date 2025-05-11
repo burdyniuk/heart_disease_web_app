@@ -1,4 +1,7 @@
+import csv
+
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.apps import apps
 
@@ -64,3 +67,33 @@ def predictions_list_view(request):
 def my_predictions(request):
     predictions = Prediction.objects.filter(created_by=request.user).order_by('-created_at')
     return render(request, 'predictions/predictions_list.html', {'predictions': predictions, 'my': True})
+
+
+@login_required(login_url='login/')
+def export_train_data_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=\"test_results.csv\"'
+
+    writer = csv.writer(response)
+    writer.writerow(['age', 'sex', 'chest_pain_type', 'resting_bp_s', 'cholesterol', 'fasting_blood_sugar',
+                     'resting_ecg', 'max_heart_rate', 'exercise_angina', 'oldpeak', 'st_slope', 'target', 'confidence'])
+
+    # Rows
+    for result in Prediction.objects.all():
+        writer.writerow([
+            result.age,
+            result.sex,
+            result.chest_pain_type,
+            result.resting_bp_s,
+            result.cholesterol,
+            result.fasting_blood_sugar,
+            result.resting_ecg,
+            result.max_heart_rate,
+            result.exercise_angina,
+            result.oldpeak,
+            result.st_slope,
+            result.target,
+            result.confidence
+        ])
+
+    return response
