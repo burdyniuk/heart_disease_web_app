@@ -4,7 +4,6 @@ from django.apps import apps
 
 from .forms import PredictionForm
 from .models import Prediction
-import prediction_model_function as prediction_model
 
 import matlab
 
@@ -36,7 +35,7 @@ def prediction_input_view(request):
 
             # Make prediction
             predictor = apps.get_app_config('predictions').predictor
-            result = predictor.quadratic_svm_prediction_model(matlab.double([input_data]))
+            result, confidence = predictor.quadratic_svm_prediction_with_probability(matlab.double([input_data]), nargout=2)
             target = int(result)
 
             # Save to database
@@ -45,12 +44,12 @@ def prediction_input_view(request):
                 resting_bp_s=data['resting_bp_s'], cholesterol=data['cholesterol'],
                 fasting_blood_sugar=data['fasting_blood_sugar'], resting_ecg=data['resting_ecg'],
                 max_heart_rate=data['max_heart_rate'], exercise_angina=data['exercise_angina'],
-                oldpeak=data['oldpeak'], st_slope=data['st_slope'], target=target,
+                oldpeak=data['oldpeak'], st_slope=data['st_slope'], target=target, confidence=confidence,
                 created_by=request.user
             )
             prediction.save()
 
-            return render(request, 'predictions/success.html', {'target': target})
+            return render(request, 'predictions/success.html', {'target': target, 'confidence': confidence})
     else:
         form = PredictionForm()
 
@@ -58,10 +57,10 @@ def prediction_input_view(request):
 
 
 def predictions_list_view(request):
-    predictions = Prediction.objects.all()
+    predictions = Prediction.objects.all().order_by('-created_at')
     return render(request, 'predictions/predictions_list.html', {'predictions': predictions})
 
 
 def my_predictions(request):
-    predictions = Prediction.objects.filter(created_by=request.user)
+    predictions = Prediction.objects.filter(created_by=request.user).order_by('-created_at')
     return render(request, 'predictions/predictions_list.html', {'predictions': predictions, 'my': True})

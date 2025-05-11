@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'djongo',
     "account.apps.AccountConfig",
-    "predictions.apps.PredictionsConfig"
+    "predictions.apps.PredictionsConfig",
+    'mathfilters',
 ]
 
 MIDDLEWARE = [

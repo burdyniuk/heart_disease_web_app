@@ -1,9 +1,12 @@
+{% load mathfilters %}
+
 <h2>Rezultatul predicției este:
     {% if target %}
         Există risc
     {% else %}
         Nu există risc
     {% endif %}
+    cu o încredere de {{ confidence|mul:100|floatformat:2  }}%
 </h2><br>
 <a href="{% url 'prediction_input' %}" class="button btn btn-outline-primary">Verifică alt risc</a><br><br>
 <a href="{% url 'my_predictions' %}" class="button btn btn-outline-primary">Predictiile mele</a><br>

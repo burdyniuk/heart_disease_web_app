@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load mathfilters %}
+
 
 {% block title %}Predictions List{% endblock %}
 
@@ -23,6 +25,7 @@
                 <th>ST</th>
                 <th>Panta segmentului ST de vârf al efortului</th>
                 <th>Rezultatul predicției</th>
+                <th>Încredere</th>
                 <th>Prezis la</th>
                 {% if not my %}
                 <th>Prezis de</th>
@@ -44,6 +47,7 @@
                 <td>{{ prediction.oldpeak }}</td>
                 <td>{{ prediction.get_st_slope_display }}</td>
                 <td>{{ prediction.get_target_display }}</td>
+                <td>{{ prediction.confidence|mul:100|floatformat:2 }}</td>
                 <td>{{ prediction.created_at }}</td>
                 {% if not my %}
                 <td>{{ prediction.created_by.username }}</td>

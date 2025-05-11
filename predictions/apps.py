@@ -1,5 +1,5 @@
 from django.apps import AppConfig
-import quadratic_svm_prediction_model as prediction_model
+import quadratic_svm_prediction_with_probability as prediction_model
 import atexit
 
 
