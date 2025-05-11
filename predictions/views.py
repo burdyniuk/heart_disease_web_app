@@ -78,7 +78,7 @@ def export_train_data_csv(request):
     writer.writerow(['age', 'sex', 'chest_pain_type', 'resting_bp_s', 'cholesterol', 'fasting_blood_sugar',
                      'resting_ecg', 'max_heart_rate', 'exercise_angina', 'oldpeak', 'st_slope', 'target', 'confidence'])
 
-    # Rows
+    # TODO: Export only the predictions confirmed by the user
     for result in Prediction.objects.all():
         writer.writerow([
             result.age,
@@ -97,3 +97,5 @@ def export_train_data_csv(request):
         ])
 
     return response
+
+# TODO: add function to confirm or not a prediction, if have disease add the diagnosis
