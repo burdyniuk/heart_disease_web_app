@@ -28,9 +28,9 @@ def prediction_input_view(request):
             data['st_slope'] = int(data['st_slope'])
 
             input_data = [
-                data['age'], data['sex'], data['chest_pain_type'], data['resting_bp_s'],
-                data['cholesterol'], data['fasting_blood_sugar'], int(data['resting_ecg']),
-                data['max_heart_rate'], data['exercise_angina'], data['oldpeak'], data['st_slope']
+                data['st_slope'], data['age'], data['chest_pain_type'], data['cholesterol'], data['exercise_angina'],
+                data['fasting_blood_sugar'], data['max_heart_rate'], data['oldpeak'],  data['resting_bp_s'],
+                int(data['resting_ecg']), data['sex']
             ]
 
             # Make prediction
