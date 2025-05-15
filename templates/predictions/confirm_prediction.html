@@ -52,7 +52,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="id_diagnosis" class="form-label">Diagnostic</label>
-                    <input type="text" name="diagnosis" id="id_diagnosis" class="form-control" maxlength="255">
+                    <input type="text" name="diagnosis" id="id_diagnosis" class="form-control" maxlength="255" autocomplete="off">
                 </div>
                 <button id="submit-button" type="submit" class="btn btn-primary w-100">Verificat de medic</button>
             </form>
@@ -92,4 +92,58 @@
             });
         });
     </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const diagnosisInput = document.getElementById('id_diagnosis');
+        const suggestionsBox = document.createElement('ul');
+        suggestionsBox.style.position = 'absolute';
+        suggestionsBox.style.border = '1px solid #ccc';
+        suggestionsBox.style.backgroundColor = '#fff';
+        suggestionsBox.style.listStyleType = 'none';
+        suggestionsBox.style.padding = '0';
+        suggestionsBox.style.margin = '0';
+        suggestionsBox.style.width = diagnosisInput.offsetWidth + 'px';
+        suggestionsBox.style.display = 'none';
+        document.body.appendChild(suggestionsBox);
+
+        diagnosisInput.addEventListener('input', function () {
+            const query = diagnosisInput.value.trim();
+            if (query.length > 0) {
+                fetch(`/predictions/diagnosis-suggestions/?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionsBox.innerHTML = '';
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                const suggestionItem = document.createElement('li');
+                                suggestionItem.textContent = item;
+                                suggestionItem.style.padding = '5px';
+                                suggestionItem.style.cursor = 'pointer';
+                                suggestionItem.addEventListener('click', function () {
+                                    diagnosisInput.value = item;
+                                    suggestionsBox.style.display = 'none';
+                                });
+                                suggestionsBox.appendChild(suggestionItem);
+                            });
+                            const rect = diagnosisInput.getBoundingClientRect();
+                            suggestionsBox.style.top = rect.bottom + window.scrollY + 'px';
+                            suggestionsBox.style.left = rect.left + window.scrollX + 'px';
+                            suggestionsBox.style.display = 'block';
+                        } else {
+                            suggestionsBox.style.display = 'none';
+                        }
+                    });
+            } else {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!diagnosisInput.contains(event.target) && !suggestionsBox.contains(event.target)) {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+    });
+</script>
 {% endblock %}

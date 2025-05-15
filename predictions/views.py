@@ -2,7 +2,8 @@ import csv
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.apps import apps
 
@@ -96,10 +97,10 @@ def export_train_data_csv(request):
 
     writer = csv.writer(response)
     writer.writerow(['age', 'sex', 'chest_pain_type', 'resting_bp_s', 'cholesterol', 'fasting_blood_sugar',
-                     'resting_ecg', 'max_heart_rate', 'exercise_angina', 'oldpeak', 'st_slope', 'target', 'confidence'])
+                     'resting_ecg', 'max_heart_rate', 'exercise_angina', 'oldpeak', 'st_slope', 'target', 'confidence',
+                     'medical_result', 'diagnosis'])
 
-    # TODO: Export only the predictions confirmed by the user
-    for result in Prediction.objects.all():
+    for result in Prediction.objects.filter(medical_result__isnull=False).distinct():
         writer.writerow([
             result.age,
             result.sex,
@@ -113,7 +114,18 @@ def export_train_data_csv(request):
             result.oldpeak,
             result.st_slope,
             result.target,
-            result.confidence
+            result.confidence,
+            result.medical_result,
+            result.diagnosis
         ])
 
     return response
+
+
+def diagnosis_suggestions(request):
+    if request.method == 'GET':
+        query = request.GET.get('q', '')
+        suggestions = Prediction.objects.filter(
+            Q(diagnosis__icontains=query)
+        ).values_list('diagnosis', flat=True).distinct()[:10]
+        return JsonResponse(list(suggestions), safe=False)
