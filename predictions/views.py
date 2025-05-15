@@ -3,7 +3,7 @@ import csv
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.apps import apps
 
 from .forms import PredictionForm, DoctorVerificationForm
@@ -83,6 +83,8 @@ def confirm_prediction(request, prediction_id):
                 prediction.diagnosis = None
 
             prediction.save()
+
+            return redirect('my_predictions')
 
     return render(request, 'predictions/confirm_prediction.html', {'prediction': prediction, 'form': DoctorVerificationForm()})
 

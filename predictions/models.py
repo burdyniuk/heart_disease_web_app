@@ -49,7 +49,7 @@ class Prediction(models.Model):
     oldpeak = models.FloatField()
     st_slope = models.IntegerField(choices=ST_SLOPE_CHOICES)
     target = models.IntegerField(choices=TARGET_CHOICES)
-    confidence = models.FloatField(null=True, blank=True)  # Optional confidence field
+    confidence = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 

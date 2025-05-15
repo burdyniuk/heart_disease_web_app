@@ -23,7 +23,7 @@
                 <p><strong>Panta segmentului ST de vârf al efortului:</strong> {{ prediction.get_st_slope_display }}</p>
                 <p><strong>Rezultatul predicției:</strong> {{ prediction.get_target_display }}</p>
                 <p><strong>Încrederea modelului:</strong> {{ prediction.confidence|mul:100|floatformat:2 }}%</p>
-                {% if prediction.medical_result %}
+                {% if prediction.medical_result is not None %}
                     <h3>Rezultat Medical</h3>
                     <p><strong>Rezultat medical:</strong> {{ prediction.get_medical_result_display }}</p>
                     {% if prediction.diagnosis %}
