@@ -1,11 +1,12 @@
 import csv
 
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.apps import apps
 
-from .forms import PredictionForm
+from .forms import PredictionForm, DoctorVerificationForm
 from .models import Prediction
 
 import matlab
@@ -69,7 +70,24 @@ def my_predictions(request):
     return render(request, 'predictions/predictions_list.html', {'predictions': predictions, 'my': True})
 
 
-@login_required(login_url='login/')
+def confirm_prediction(request, prediction_id):
+    prediction = Prediction.objects.get(id=prediction_id)
+
+    if request.method == 'POST':
+        form = DoctorVerificationForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            prediction.medical_result = data['result']
+            prediction.diagnosis = data['diagnosis']
+            if data['result'] == 0:
+                prediction.diagnosis = None
+
+            prediction.save()
+
+    return render(request, 'predictions/confirm_prediction.html', {'prediction': prediction, 'form': DoctorVerificationForm()})
+
+
+@staff_member_required(login_url='login/')
 def export_train_data_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=\"test_results.csv\"'
@@ -97,5 +115,3 @@ def export_train_data_csv(request):
         ])
 
     return response
-
-# TODO: add function to confirm or not a prediction, if have disease add the diagnosis

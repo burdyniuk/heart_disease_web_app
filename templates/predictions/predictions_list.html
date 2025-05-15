@@ -31,7 +31,9 @@
                 <th>Încredere</th>
                 <th>Prezis la</th>
                 {% if not my %}
-                <th>Prezis de</th>
+                    <th>Prezis de</th>
+                {% else %}
+                    <th>Verificare</th>
                 {% endif %}
             </tr>
         </thead>
@@ -53,7 +55,9 @@
                 <td>{{ prediction.confidence|mul:100|floatformat:2 }}</td>
                 <td>{{ prediction.created_at }}</td>
                 {% if not my %}
-                <td>{{ prediction.created_by.username }}</td>
+                    <td>{{ prediction.created_by.username }}</td>
+                {% else %}
+                    <td><a class="btn btn-success" href="{% url 'confirm_prediction' prediction.id %}">Verificare</a></td>
                 {% endif %}
             </tr>
             {% endfor %}

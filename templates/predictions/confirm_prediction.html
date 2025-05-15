@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+
+{% block title %}Confirmare sau infirmare predictie{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Predicție din data: {{ prediction.created_at }}</h5>
+            </div>
+            <br class="card-body">
+                <p><strong>Vârsta:</strong> {{ prediction.age }} ani</p>
+                <p><strong>Sex:</strong> {{ prediction.get_sex_display }}</p>
+                <p><strong>Tipul de durere toracică:</strong> {{ prediction.get_chest_pain_type_display }}</p>
+                <p><strong>Tensiunea arterială în repaus (mm/Hg):</strong> {{ prediction.resting_bp_s }}</p>
+                <p><strong>Colesterol:</strong> {{ prediction.cholesterol }}</p>
+                <p><strong>Zahărul din sânge în post:</strong> {{ prediction.get_fasting_blood_sugar_display }}</p>
+                <p><strong>Rezultatele electrocardiogramei în repaus:</strong> {{ prediction.get_resting_ecg_display }}</p>
+                <p><strong>Ritmul cardiac maxim atins:</strong> {{ prediction.max_heart_rate }}</p>
+                <p><strong>Angina pectorală indusă de efort:</strong> {{ prediction.get_exercise_angina_display }}</p>
+                <p><strong>ST:</strong> {{ prediction.oldpeak }}</p>
+                <p><strong>Panta segmentului ST de vârf al efortului:</strong> {{ prediction.get_st_slope_display }}</p>
+                <p><strong>Rezultatul predicției:</strong> {{ prediction.get_target_display }}</p>
+                <p><strong>Încrederea modelului:</strong> {{ prediction.confidence|mul:100|floatformat:2 }}%</p>
+                {% if prediction.medical_result %}
+                    <h3>Rezultat Medical</h3>
+                    <p><strong>Rezultat medical:</strong> {{ prediction.get_medical_result_display }}</p>
+                    {% if prediction.diagnosis %}
+                        <p><strong>Diagnoza medicală:</strong> {{ prediction.diagnosis }}</p>
+                    {% endif %}
+                {% else %}
+                    <p><strong>Rezultatul predicției:</strong> {{ prediction.get_target_display }}</p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4 mx-auto" style="width: 400px;">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_result" class="form-label">Rezultat medical</label>
+                    {% for radio in form.result %}
+                        <div class="form-check">
+                            {{ radio.tag }}
+                            <label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    <label for="id_diagnosis" class="form-label">Diagnostic</label>
+                    <input type="text" name="diagnosis" id="id_diagnosis" class="form-control" maxlength="255">
+                </div>
+                <button id="submit-button" type="submit" class="btn btn-primary w-100">Verificat de medic</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const radios = document.querySelectorAll('input[name="result"]');
+            const diagnosisInput = document.getElementById('id_diagnosis');
+            const submitButton = document.getElementById('submit-button');
+
+            radios.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    if (this.value === '1') { // Assuming '1' corresponds to the second radio option
+                        diagnosisInput.parentElement.style.display = 'block';
+                    } else {
+                        diagnosisInput.parentElement.style.display = 'none';
+                    }
+                });
+            });
+
+            // Initial state
+            const selectedRadio = document.querySelector('input[name="result"]:checked');
+            if (selectedRadio && selectedRadio.value === '1') {
+                diagnosisInput.parentElement.style.display = 'block';
+            } else {
+                diagnosisInput.parentElement.style.display = 'none';
+            }
+
+            // Form validation
+            submitButton.addEventListener('click', function (event) {
+                const selectedRadio = document.querySelector('input[name="result"]:checked');
+                if (selectedRadio && selectedRadio.value === '1' && !diagnosisInput.value.trim()) {
+                    event.preventDefault();
+                    alert('Câmpul "Diagnostic" nu poate fi gol dacă selectați această opțiune.');
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -53,5 +53,8 @@ class Prediction(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    medical_result = models.IntegerField(choices=TARGET_CHOICES, null=True, blank=True)
+    diagnosis = models.CharField(max_length=255, null=True, blank=True)
+
     def __str__(self):
         return f'Prediction {self.id}'

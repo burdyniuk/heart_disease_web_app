@@ -1,5 +1,7 @@
 from django import forms
 
+from predictions.models import Prediction
+
 
 class PredictionForm(forms.Form):
     age = forms.IntegerField(label='Age')
@@ -26,3 +28,13 @@ class PredictionForm(forms.Form):
     exercise_angina = forms.ChoiceField(label='Exercise Angina', choices=[(0, 'No'), (1, 'Yes')])
     oldpeak = forms.FloatField(label='Oldpeak')
     st_slope = forms.ChoiceField(label='the slope of the peak exercise ST segment', choices=[(1, 'Upsloping'), (2, 'Flat'), (3, 'Downsloping')])
+
+
+class DoctorVerificationForm(forms.Form):
+    result = forms.ChoiceField(
+        label='Rezultat medical',
+        choices=Prediction.TARGET_CHOICES,
+        widget=forms.RadioSelect
+    )
+
+    diagnosis = forms.CharField(max_length=255, label='Diagnostic', required=False)
