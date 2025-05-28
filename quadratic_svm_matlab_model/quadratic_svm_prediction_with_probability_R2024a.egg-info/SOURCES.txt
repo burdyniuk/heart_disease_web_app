@@ -1,0 +1,7 @@
+setup.py
+quadratic_svm_prediction_with_probability/__init__.py
+quadratic_svm_prediction_with_probability/quadratic_svm_prediction_with_probability.ctf
+quadratic_svm_prediction_with_probability_R2024a.egg-info/PKG-INFO
+quadratic_svm_prediction_with_probability_R2024a.egg-info/SOURCES.txt
+quadratic_svm_prediction_with_probability_R2024a.egg-info/dependency_links.txt
+quadratic_svm_prediction_with_probability_R2024a.egg-info/top_level.txt
