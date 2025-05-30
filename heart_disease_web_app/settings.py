@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "account.apps.AccountConfig",
     "predictions.apps.PredictionsConfig",
     'mathfilters',
+    'analytics.apps.AnalyticsConfig'
 ]
 
 MIDDLEWARE = [
