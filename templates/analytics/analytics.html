@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Analitica rezultatelor{% endblock %}
+
+{% block content %}
+    <div style="padding-right: 20px; padding-left: 20px;">
+        <h1>Analitica datelor</h1>
+
+        <h3>Repartia predictiei</h3>
+        <canvas id="target_repartition"></canvas>
+
+        <h3>Repartia dupa sex</h3>
+        <p>Total femei (inclusiv sanatosi): {{ charts.sex_repartition.total_females }}<br>
+        Total barbati (inclusiv sanatosi): {{ charts.sex_repartition.total_males }}</p>
+        <canvas id="sex_repartition"></canvas>
+
+        <h3>Repartia diagnozelor</h3>
+        <canvas id="diagnosis_repartition"></canvas>
+
+        <h3>Repartia bolnavilor dupa varsta</h3>
+        <canvas id="ages_repartition"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('target_repartition').getContext('2d');
+        const target_repartition = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ charts.target_repartition.labels|safe }},
+                datasets: [{
+                    label: 'Repartitia rezultatelor predicției',
+                    data: {{ charts.target_repartition.values|safe }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        const ctx1 = document.getElementById('sex_repartition').getContext('2d');
+        const sex_repartition = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: {{ charts.sex_repartition.labels|safe }},
+                datasets: [{
+                    label: 'Repartitia bolnavilor dupa sex',
+                    data: {{ charts.sex_repartition.values|safe }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        const ctx2 = document.getElementById('diagnosis_repartition').getContext('2d');
+        const diagnosis_repartition = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: {{ charts.diagnosis_repartition.labels|safe }},
+                datasets: [{
+                    label: 'Repartitia diagnozelor',
+                    data: {{ charts.diagnosis_repartition.values|safe }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        const ctx3 = document.getElementById('ages_repartition').getContext('2d');
+        const ages_repartition = new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: {{ charts.ages_repartition.labels|safe }},
+                datasets: [{
+                    label: 'Repartitia bolnavilor dupa varsta',
+                    data: {{ charts.ages_repartition.values|safe }},
+                    fill: false,
+                    tension: 0.3,
+                    borderWidth: 2
+                }]
+            },
+
+            options: {
+                plugins: {
+                    zoom: {
+                        zoom: {
+                            wheel: {
+                                enabled: true
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'x',
+                        },
+                        pan: {
+                            enabled: true,
+                            mode: 'x',
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Age'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Count'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+
+{% endblock %}
