@@ -9,14 +9,11 @@ from sklearn.model_selection import train_test_split
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'heart_disease_web_app.settings')
 
-# Инициализируем Django
 django.setup()
 
 from predictions.models import Prediction
 from django.contrib.auth.models import User
 user = User.objects.get(id=1)
-
-
 
 dataset_path = r'C:\Users\burdyniuk\Desktop\master\disertatia\datasets\new_set.csv'
 
@@ -27,7 +24,6 @@ x = train_data.drop(columns=['target'])
 pred_prob = prediction_model_with_probability.initialize()
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
-print(x_test)
 
 for index, row in x_test.iterrows():
 	print(row)
@@ -35,7 +31,6 @@ for index, row in x_test.iterrows():
 	result, confidence = pred_prob.quadratic_svm_prediction_with_probability(input_data, nargout=2)
 	print(result, confidence)
 	y_value = y_test.loc[index]
-	correct = result == y_value
 
 	if y_value:
 		prediction = Prediction(
