@@ -5,7 +5,7 @@ from django.db.models import Count
 
 def analytics_view(request):
 	all_predictions = Prediction.objects.all().count()
-	validated_count = Prediction.objects.filter(medical_result=1).count()
+	validated_count = Prediction.objects.filter(medical_result__isnull=False).count()
 
 	target_counts = (
 		Prediction.objects.values('target')
