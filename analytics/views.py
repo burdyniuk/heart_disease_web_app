@@ -4,6 +4,9 @@ from django.db.models import Count
 
 
 def analytics_view(request):
+	all_predictions = Prediction.objects.all().count()
+	validated_count = Prediction.objects.filter(medical_result=1).count()
+
 	target_counts = (
 		Prediction.objects.values('target')
 		.annotate(count=Count('target'))
@@ -54,5 +57,7 @@ def analytics_view(request):
 
 	return render(request, 'analytics/analytics.html', {
 		'charts': charts,
+		'all_predictions': all_predictions,
+		'validated_count': validated_count,
 	})
 
