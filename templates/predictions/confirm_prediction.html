@@ -29,8 +29,6 @@
                     {% if prediction.diagnosis %}
                         <p><strong>Diagnoza medicală:</strong> {{ prediction.diagnosis }}</p>
                     {% endif %}
-                {% else %}
-                    <p><strong>Rezultatul predicției:</strong> {{ prediction.get_target_display }}</p>
                 {% endif %}
 
             </div>
